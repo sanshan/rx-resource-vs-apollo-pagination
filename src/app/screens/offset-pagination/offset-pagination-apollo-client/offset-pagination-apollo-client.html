@@ -1,0 +1,13 @@
+@let _page = page();
+@let _loading = loading();
+
+<app-items-table-with-pagination
+  title="Apollo client pagination"
+  [isLoading]="_loading"
+  [items]="_page?.items ?? []"
+  [columns]="['id', 'title', 'type', 'userId', 'score', 'createdAt']"
+  [total]="_page?.total ?? 0"
+  (paginatorChange)="
+    query.setVariables({ limit: $event.limit, offset: ($event.page - 1) * $event.limit })
+  "
+/>

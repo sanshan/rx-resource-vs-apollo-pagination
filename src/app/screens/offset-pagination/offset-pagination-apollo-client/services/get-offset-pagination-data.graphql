@@ -1,0 +1,13 @@
+query GetOffsetPaginationData($offset: Int, $limit: Int) {
+    FindAllItems(offset: $offset, limit: $limit) {
+        total
+        items {
+            id
+            title
+            type
+            userId
+            score
+            createdAt
+        }
+    }
+}

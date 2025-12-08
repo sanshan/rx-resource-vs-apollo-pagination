@@ -1,0 +1,35 @@
+@let _loading = isLoading();
+@let _paginator = paginator();
+
+@if (_loading) {
+  <div class="absolute top-0 inset-x-0 z-20">
+    <mat-progress-bar mode="indeterminate" />
+  </div>
+}
+
+<mat-toolbar class="sticky top-0 z-10">
+  <span class="text-xl font-semibold">{{ title() }}</span>
+</mat-toolbar>
+
+<main class="flex-1 overflow-hidden" role="main" [attr.aria-busy]="_loading" aria-live="polite">
+  <div
+    class="h-full overflow-auto transition-opacity"
+    [class.pointer-events-none]="_loading"
+    [class.opacity-40]="_loading"
+  >
+    <app-items-table [items]="items()" [displayedColumns]="columns()" />
+  </div>
+</main>
+
+<footer class="sticky bottom-0 border-t border-gray-200 bg-white">
+  <mat-paginator
+    aria-label="Items pagination"
+    showFirstLastButtons
+    [disabled]="_loading"
+    [pageIndex]="_paginator.page - 1"
+    [length]="total()"
+    [pageSize]="_paginator.limit"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    (page)="onPage($event)"
+  />
+</footer>

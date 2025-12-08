@@ -1,1 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+@layer base {
+    html,
+    body,
+    app-root {
+        @apply h-full;
+    }
+
+    body {
+        @apply m-0 flex flex-col;
+    }
+}

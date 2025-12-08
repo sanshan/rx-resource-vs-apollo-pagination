@@ -1,0 +1,59 @@
+scalar DateTime
+
+enum ItemTypeEnum { post comment task }
+
+type Item {
+    id: ID!
+    title: String!
+    createdAt: DateTime!
+    type: ItemTypeEnum!
+    userId: String!
+    score: Int!
+}
+
+type ItemsPage {
+    items: [Item!]!
+    total: Int!
+}
+
+type PageInfo {
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+    startCursor: String
+    endCursor: String
+}
+
+type ItemEdge {
+    cursor: String!
+    node: Item!
+}
+
+type ItemsConnection {
+    edges: [ItemEdge!]!
+    pageInfo: PageInfo!
+    totalCount: Int
+}
+
+type Query {
+    FindAllItems(
+        limit: Int
+        offset: Int
+        userId: String
+        type: String
+        q: String
+        sort: String
+    ): ItemsPage!
+
+    ItemsConnection(
+        first: Int
+        after: String
+        last: Int
+        before: String
+        userId: String
+        type: String
+        q: String
+        sort: String
+    ): ItemsConnection!
+
+    GetItem(id: ID!): Item
+}
