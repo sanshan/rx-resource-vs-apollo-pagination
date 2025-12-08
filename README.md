@@ -1,59 +1,32 @@
-# NgResourceVsApolloPagination
+# Angular rxResource vs Apollo Client
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.9.
+Small demo about pagination in Angular. It compares two ways to load data:
 
-## Development server
+- **rxResource (Angular Signals)**
+- **Apollo Client (watchQuery)**
 
-To start a local development server, run:
+Both reset data and set `loading=true` when a new request starts. The table blinks while they clear UI. In Apollo you can avoid this with a simple check: keep old state until new data arrives. In rxResource you need a linked signal, store `previous.value`, watch resource status, and add your own show/hide logic. That extra work makes rxResource lose some of its "magic".
 
-```bash
-ng serve
-```
+## Run the project
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+1. Install deps: `npm install`.
+2. Start dev server: `npm start` or `ng serve`.
+3. Open `http://localhost:4200/`. The page reloads on file save.
 
-## Code scaffolding
+## Mock backend with MSW
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- In dev mode `src/main.ts` calls `initMsw()`. It registers the service worker from `src/mockServiceWorker.js` and uses handlers in `src/mocks/handlers`.
+- Network logs show in the browser console as `[MSW][request:*]`. If you see `request:unhandled`, a handler is missing.
+- The worker file must sit in `src/` and is loaded via `serviceWorker: { url: '/mockServiceWorker.js' }`.
 
-```bash
-ng generate component component-name
-```
+## Generate fake data
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+The script `tools/generate-dataset.ts` builds JSON items (faker + date sort).
 
 ```bash
-ng build
+npm run gen:dataset           # default 500 records into src/mocks/datasets/items.json
+npm run gen:dataset -- 1000   # custom count
+npm run gen:dataset -- 200 --out src/mocks/datasets/custom.json
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+The file is created with needed folders. Types `Item` and `ItemType` come from that file.
